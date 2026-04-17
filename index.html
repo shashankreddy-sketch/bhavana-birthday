@@ -4,122 +4,115 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Bhavana's Birthday 🎂</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
-  body{
-    height:100vh;
-    overflow:hidden;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:#fff;
-    background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #533483);
-    background-size: 400% 400%;
-    animation: gradientFlow 12s ease infinite;
-  }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
-  @keyframes gradientFlow {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-  }
+body{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  color:#fff;
+  background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+  url('https://images.unsplash.com/photo-1519681393784-d120267933ba');
+  background-size:cover;
+  background-position:center;
+}
 
-  .card{
-    text-align:center;
-    padding:32px;
-    border-radius:20px;
-    background:rgba(0,0,0,0.4);
-    backdrop-filter:blur(14px);
-    box-shadow:0 0 40px rgba(0,0,0,0.6);
-    animation: fadeIn 1.5s ease;
-  }
+.card{
+  text-align:center;
+  padding:40px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(20px);
+  box-shadow:0 10px 40px rgba(0,0,0,0.6);
+  z-index:2;
+}
 
-  h1{font-size:2.6rem;margin-bottom:12px}
-  .typing{font-size:1.1rem;min-height:28px;opacity:0.9}
+h1{
+  font-family:'Playfair Display',serif;
+  font-size:2.8rem;
+  margin-bottom:15px;
+}
 
-  button{
-    margin-top:20px;
-    padding:10px 22px;
-    border:none;
-    border-radius:10px;
-    background:rgba(255,255,255,0.1);
-    color:#fff;
-    backdrop-filter:blur(6px);
-    cursor:pointer;
-    transition:.3s;
-  }
+.typing{font-size:1.2rem;}
+.hidden{margin-top:25px;font-size:1.3rem;}
 
-  button:hover{transform:scale(1.08);background:rgba(255,255,255,0.2)}
+/* Balloons */
+.balloon{
+  position:absolute;
+  bottom:-100px;
+  width:40px;
+  height:55px;
+  border-radius:50% 50% 45% 45%;
+  animation: floatUp linear infinite;
+  opacity:0.8;
+}
 
-  .hidden{display:none;margin-top:20px;font-size:1.2rem;letter-spacing:1px}
+.balloon::after{
+  content:'';
+  position:absolute;
+  width:2px;
+  height:40px;
+  background:#fff;
+  left:50%;
+  top:55px;
+}
 
-  @keyframes fadeIn{
-    from{opacity:0;transform:translateY(20px)}
-    to{opacity:1;transform:translateY(0)}
-  }
+@keyframes floatUp{
+  0%{transform:translateY(0) translateX(0)}
+  100%{transform:translateY(-110vh) translateX(30px)}
+}
 
-  canvas{position:absolute;top:0;left:0;pointer-events:none}
+/* Particles */
+.particle{
+  position:absolute;
+  width:6px;
+  height:6px;
+  opacity:0.7;
+  animation: drift linear infinite;
+}
+
+@keyframes drift{
+  0%{transform:translateY(0)}
+  100%{transform:translateY(100vh)}
+}
 </style>
 </head>
+
 <body>
-<canvas id="confetti"></canvas>
 
 <div class="card">
-  <h1>Happy Birthday Bhavana</h1>
-  <div class="typing" id="typing"></div>
-  <button onclick="reveal()">tap</button>
-  <div class="hidden" id="msg">— Shashank</div>
+  <h1>Happy Birthday Bhavana 🎉</h1>
+  <div class="typing">Wishing you a day filled with happiness and a year filled with joy.</div>
+  <div class="hidden">— Shashank</div>
 </div>
 
 <script>
-// Minimal typing
-const text = "Have a good one.";
-let i=0;
-function type(){
-  if(i<text.length){
-    document.getElementById("typing").innerHTML += text.charAt(i);
-    i++;
-    setTimeout(type,50);
-  }
-}
-type();
-
-// Reveal + confetti
-function reveal(){
-  document.getElementById('msg').style.display='block';
-  startConfetti();
+// Balloons
+for(let i=0;i<10;i++){
+  let b=document.createElement("div");
+  b.className="balloon";
+  b.style.left=Math.random()*100+"vw";
+  b.style.animationDuration=(6+Math.random()*4)+"s";
+  b.style.background=`hsl(${Math.random()*360},70%,70%)`;
+  document.body.appendChild(b);
 }
 
-// Confetti
-const canvas = document.getElementById('confetti');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let pieces = [];
-for(let i=0;i<100;i++){
-  pieces.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    size:Math.random()*4+2,
-    speed:Math.random()*2+1
-  });
-}
-
-function startConfetti(){
-  function update(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    pieces.forEach(p=>{
-      ctx.fillStyle = `hsl(${Math.random()*360},100%,60%)`;
-      ctx.fillRect(p.x,p.y,p.size,p.size);
-      p.y += p.speed;
-      if(p.y>canvas.height) p.y=0;
-    });
-    requestAnimationFrame(update);
-  }
-  update();
+// Particles
+for(let i=0;i<40;i++){
+  let p=document.createElement("div");
+  p.className="particle";
+  p.style.left=Math.random()*100+"vw";
+  p.style.animationDuration=(4+Math.random()*4)+"s";
+  p.style.background=`hsl(${Math.random()*360},100%,80%)`;
+  document.body.appendChild(p);
 }
 </script>
+
 </body>
 </html>
