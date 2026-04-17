@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bhavana's Birthday 🎂</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+  body{
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#fff;
+    background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #533483);
+    background-size: 400% 400%;
+    animation: gradientFlow 12s ease infinite;
+  }
+
+  @keyframes gradientFlow {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+
+  .card{
+    text-align:center;
+    padding:32px;
+    border-radius:20px;
+    background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(14px);
+    box-shadow:0 0 40px rgba(0,0,0,0.6);
+    animation: fadeIn 1.5s ease;
+  }
+
+  h1{font-size:2.6rem;margin-bottom:12px}
+  .typing{font-size:1.1rem;min-height:28px;opacity:0.9}
+
+  button{
+    margin-top:20px;
+    padding:10px 22px;
+    border:none;
+    border-radius:10px;
+    background:rgba(255,255,255,0.1);
+    color:#fff;
+    backdrop-filter:blur(6px);
+    cursor:pointer;
+    transition:.3s;
+  }
+
+  button:hover{transform:scale(1.08);background:rgba(255,255,255,0.2)}
+
+  .hidden{display:none;margin-top:20px;font-size:1.2rem;letter-spacing:1px}
+
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(20px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  canvas{position:absolute;top:0;left:0;pointer-events:none}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+
+<div class="card">
+  <h1>Happy Birthday Bhavana</h1>
+  <div class="typing" id="typing"></div>
+  <button onclick="reveal()">tap</button>
+  <div class="hidden" id="msg">— Shashank</div>
+</div>
+
+<script>
+// Minimal typing
+const text = "Have a good one.";
+let i=0;
+function type(){
+  if(i<text.length){
+    document.getElementById("typing").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(type,50);
+  }
+}
+type();
+
+// Reveal + confetti
+function reveal(){
+  document.getElementById('msg').style.display='block';
+  startConfetti();
+}
+
+// Confetti
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let pieces = [];
+for(let i=0;i<100;i++){
+  pieces.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    size:Math.random()*4+2,
+    speed:Math.random()*2+1
+  });
+}
+
+function startConfetti(){
+  function update(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      ctx.fillStyle = `hsl(${Math.random()*360},100%,60%)`;
+      ctx.fillRect(p.x,p.y,p.size,p.size);
+      p.y += p.speed;
+      if(p.y>canvas.height) p.y=0;
+    });
+    requestAnimationFrame(update);
+  }
+  update();
+}
+</script>
+</body>
+</html>
